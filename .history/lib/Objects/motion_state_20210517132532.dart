@@ -1,0 +1,3 @@
+class MotionState extends bool{
+  
+}

@@ -1,0 +1,4 @@
+class MotionState {
+  bool state;
+  
+}
