@@ -24,20 +24,20 @@ while True:
     # whether motion has been detected in the last five minutes
     request = requests.get('/getMotionState')
     key, value = request.split(':') # e.g. "motionState":"true"
+  
+    # If there is motion, send light and temperature to arduino (if applicable) 
+    if value == 'true':
+        
+        # get temperature
+        request = requests.get('/getTemp')
+        key, value = request.split(':') # e.g. "temp":"20"
+        # rule that if temperature is above 30, sound the alarm
+        if value > 30:
+            arduino_connection.digital_play(BUZZER_PIN, 500)
 
-        # If there is motion, send light and temperature to arduino (if applicable) 
-        if value == 'true':
-            
-            # get temperature
-            request = requests.get('/getTemp')
-            key, value = request.split(':') # e.g. "temp":"20"
-            # rule that if temperature is above 30, sound the alarm
-            if value > 30:
-                arduino_connection.digital_play(BUZZER_PIN, 500)
-
-            # get softpot value for light brightness
-            request = requests.get('/getBrightness')
-            key, value = request.split(':') # e.g. "brightness":"600"
-            # convert softpot scale from 0 - 1023 to 0 - 255 and set the LED accordingly
-            adjusted_softpot = (255 / 1023) * float(value) 
-            arduino_connection.analog_write(LED_PIN, adjusted_softpot)
+        # get softpot value for light brightness
+        request = requests.get('/getBrightness')
+        key, value = request.split(':') # e.g. "brightness":"600"
+        # convert softpot scale from 0 - 1023 to 0 - 255 and set the LED accordingly
+        adjusted_softpot = (255 / 1023) * float(value) 
+        arduino_connection.analog_write(LED_PIN, adjusted_softpot)
