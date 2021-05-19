@@ -21,7 +21,7 @@ class SmartHomeIotChannel extends ApplicationChannel {
       home.motionState =
           MotionState(Timer(const Duration(minutes: 5), () => {}));
       return Response.ok(
-          {"newMotionState": home.motionState.getState().toString()});
+          {"newMotionState": home.motionState.timer.isActive.toString()});
     });
 
     ///Sets the temp of the system
@@ -49,7 +49,7 @@ class SmartHomeIotChannel extends ApplicationChannel {
     ///Get weather motion has been detected in the last 5 minutes
     router.route("/getMotionState").linkFunction((request) async {
       return Response.ok(
-          {"motionState": home.motionState.getState().toString()});
+          {"motionState": home.motionState.timer.isActive.toString()});
     });
 
     return router;
